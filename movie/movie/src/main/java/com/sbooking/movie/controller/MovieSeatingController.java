@@ -33,8 +33,8 @@ public class MovieSeatingController {
         }
     }
 
-    @GetMapping("movie_seating/getSeats/{id}")
-    public List<MovieSeating> getSeatsBySession(@PathVariable String id){
+    @GetMapping("movie_seating/getSeats")
+    public List<MovieSeating> getSeatsBySession(@RequestParam String id){
         try{
             return movieSeatingService.getSeatsBySession(Integer.parseInt(id));
         }catch (Exception e){

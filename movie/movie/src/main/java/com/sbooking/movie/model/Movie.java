@@ -14,6 +14,7 @@ public class Movie {
     @Id
     private int movie_id;
     private String name;
+    private String image_url;
     private String synopsis;
     private String duration;
 

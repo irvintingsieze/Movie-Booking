@@ -3,10 +3,7 @@ package com.sbooking.movie.controller;
 import com.sbooking.movie.model.Booking;
 import com.sbooking.movie.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,8 +25,8 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/booking/{user_id}")
-    public List<Booking> getBookingsByUser (@PathVariable String user_id){
+    @GetMapping("/booking")
+    public List<Booking> getBookingsByUser (@RequestParam String user_id){
         try{
             return bookingService.getBookingsByUser(Integer.parseInt(user_id));
         }catch (RuntimeException e){
