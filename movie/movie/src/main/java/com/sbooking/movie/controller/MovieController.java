@@ -39,4 +39,13 @@ public class MovieController {
         }
     }
 
+    @GetMapping("moviesession/movie/{mv_id}")
+    public List<MovieSession> findMovieSessionByMovieId(@PathVariable String mv_id){
+        try{
+            return movieSessionService.getAllMovieSessionByMovieId(Integer.parseInt(mv_id));
+        }catch (Exception e){
+            return null;
+        }
+    }
+
 }

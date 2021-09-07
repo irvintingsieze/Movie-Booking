@@ -1,38 +1,157 @@
-.App {
+.menu_container {
+  grid-template-columns: 100px 50px 100px;
+  grid-template-rows: 80px auto 80px;
+  column-gap: 10px;
+  row-gap: 15px;
+}
+
+.session_container {
+  display: flex;
+  orientation: row;
+  padding-top: 2%;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.session_img {
+  margin: 5%;
+}
+
+.session_synopsis {
+  text-align: left;
+}
+
+.rectangle {
+  display: flex;
+  width: 80%;
+  height: 30%;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: black;
+  justify-content: center;
+  margin-left: 10%;
+  margin-top: 5%;
+  font-weight: bolder;
+}
+
+.circle {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  background-color: rgb(4, 190, 4);
+  justify-content: center;
+  border-radius: 50%;
+  border-style: solid;
+  cursor: pointer;
+}
+
+.circle:hover {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  background-color: rgb(4, 190, 4);
+  justify-content: center;
+  border-radius: 50%;
+  border-style: solid;
+  cursor: pointer;
+  opacity: 70%;
+}
+
+.circle_vip {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  background-color: gold;
+  justify-content: center;
+  border-radius: 50%;
+  border-style: solid;
+  cursor: pointer;
+}
+
+.circle_vip:hover {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  background-color: gold;
+  justify-content: center;
+  border-radius: 50%;
+  border-style: solid;
+  cursor: pointer;
+  opacity: 70%;
+}
+
+.text {
+  margin: auto;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.text_span{
+  font-weight: normal;
+  float: right;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.left_container_seating {
+  width: 65%;
+  height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.right_container_seating {
+  width: 35%;
+  height: 100%;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.movie_details_seating {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  orientation: row;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.movie_img {
+  max-width: 100px;
+  margin: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.movie_seating_container {
+  max-width: 80%;
+}
+
+.grid_seating {
+  display: grid;
+  width: 65%;
+  height: 100%;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  margin-top: 5%;
+}
+
+.set_center {
+  display: flex;
+  justify-content: center;
+}
+
+.circle_clicked {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  background-color: rgb(57, 101, 247);
+  justify-content: center;
+  border-radius: 50%;
+  border-style: solid;
+  cursor: pointer;
+}
+
+.circle_unavail {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  background-color: rgb(247, 57, 57);
+  justify-content: center;
+  border-radius: 50%;
+  border-style: solid;
+  cursor: no-drop;
 }

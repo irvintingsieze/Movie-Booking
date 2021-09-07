@@ -7,6 +7,8 @@ import com.sbooking.movie.repository.MovieSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MovieSessionService {
 
@@ -15,5 +17,9 @@ public class MovieSessionService {
 
     public MovieSession getMovieSessionById(int id){
         return movieSessionRepository.findById(id).orElse(null);
+    }
+
+    public List<MovieSession> getAllMovieSessionByMovieId (int movieId) {
+        return movieSessionRepository.findAllByMovieId(movieId);
     }
 }

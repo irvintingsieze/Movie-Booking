@@ -27,16 +27,16 @@ public class MovieSeatingService {
     public List<MovieSeating> addNewSession (int movieSessionId){
         List<MovieSeating> movieSeatings = new ArrayList<>();
         MovieSession movieSession = movieSessionRepository.findById(movieSessionId).orElse(null);
-        Seats normalSeats = seatsRepository.findById(1).orElse(null);
-        Seats vipSeats = seatsRepository.findById(2).orElse(null);
+        Seats vipSeats = seatsRepository.findById(1).orElse(null);
+        Seats normalSeats = seatsRepository.findById(2).orElse(null);
         for (int index = 0; index<MOVIE_SEATS_TOTAL; index ++){
             MovieSeating movieSeating = new MovieSeating();
             movieSeating.setOccupied(false);
             movieSeating.setMovieSessions(movieSession);
-            if (index>30 || index < 20)
-                movieSeating.setSeats(vipSeats);
-            else
+            if (index>=30 || index < 20)
                 movieSeating.setSeats(normalSeats);
+            else
+                movieSeating.setSeats(vipSeats);
             movieSeatings.add(movieSeatingRepository.save(movieSeating));
         }
         return movieSeatings;
@@ -53,6 +53,20 @@ public class MovieSeatingService {
 
     public List<MovieSeating> getSeatsBySession (int sessionId){
         return movieSeatingRepository.findAllByMovieSession(sessionId);
+    }
+
+    public List <Seats> getAllSeats () {
+        return seatsRepository.findAll();
+    }
+
+    public void setMultipleOccupied (int[] seatIdList){
+        for (int i=0; i<seatIdList.length; i++){
+            MovieSeating movieSeating = movieSeatingRepository.findById(seatIdList[i]).orElse(null);
+            if (movieSeating!=null){
+                movieSeating.setOccupied(true);
+                movieSeatingRepository.save(movieSeating);
+            }
+        }
     }
 
 }

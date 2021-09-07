@@ -9,6 +9,6 @@ import java.util.Collection;
 import java.util.List;
 
 public interface MovieSeatingRepository extends JpaRepository<MovieSeating,Integer> {
-    @Query(value = "SELECT * FROM movie_seating WHERE mv_session_id = ?", nativeQuery = true)
+    @Query(value = "SELECT * FROM movie_seating WHERE mv_session_id = ? ORDER BY movie_seating_id ASC", nativeQuery = true)
     List<MovieSeating> findAllByMovieSession(int movieSessionId);
 }
