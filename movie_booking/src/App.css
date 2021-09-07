@@ -175,3 +175,19 @@
   background-color: rgb(57, 101, 247);
   cursor: pointer;
 }
+
+.margins{
+  margin:10px 10px 10px 0px;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+
+.text_details {
+  margin:5px;
+}
+
+.hrMargins{
+  margin-left: 40px;
+  margin-right: 40px;
+}

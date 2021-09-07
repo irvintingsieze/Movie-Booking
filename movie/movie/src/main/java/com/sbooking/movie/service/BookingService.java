@@ -21,13 +21,15 @@ public class BookingService {
     @Autowired
     BookingRepository bookingRepository;
 
-    public Booking addNewBooking (int userid, int movieSeatingId){
+    public void addNewBooking (int userid, int[] bookedSeatId){
         Users newUser = userRepository.findById(userid).orElse(null);
-        MovieSeating movieSeating = movieSeatingRepository.findById(movieSeatingId).orElse(null);
-        Booking newBooking = new Booking();
-        newBooking.setUsers(newUser);
-        newBooking.setMovieSeating(movieSeating);
-        return bookingRepository.save(newBooking);
+        for (int i = 0; i<bookedSeatId.length;i++) {
+            MovieSeating movieSeating = movieSeatingRepository.findById(bookedSeatId[i]).orElse(null);
+            Booking newBooking = new Booking();
+            newBooking.setUsers(newUser);
+            newBooking.setMovieSeating(movieSeating);
+            bookingRepository.save(newBooking);
+        }
     }
 
     public List<Booking> getBookingsByUser (int userid){

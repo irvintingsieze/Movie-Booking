@@ -1,5 +1,6 @@
 package com.sbooking.movie.controller;
 
+import com.sbooking.movie.dto.MovieSeatUpdate;
 import com.sbooking.movie.model.Booking;
 import com.sbooking.movie.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,13 @@ public class BookingController {
     @Autowired
     BookingService bookingService;
 
-    @PostMapping("booking/newBooking/{user_id}/{movie_seating_id}")
-    public Booking addBooking (@PathVariable Map<String, String> bookingMap){
+    @PostMapping("booking/newBooking/{user_id}")
+    public void addBooking (@PathVariable String user_id, @RequestBody MovieSeatUpdate bookedSeats){
         try{
-            int userid = Integer.parseInt(bookingMap.get("user_id"));
-            int movieSeatingId = Integer.parseInt(bookingMap.get("movie_seating_id"));
-            return bookingService.addNewBooking(userid,movieSeatingId);
+            int userid = Integer.parseInt(user_id);
+            bookingService.addNewBooking(userid,bookedSeats.getSeatList());
         }catch (RuntimeException e){
-            return null;
+            System.out.println(e);
         }
     }
 
