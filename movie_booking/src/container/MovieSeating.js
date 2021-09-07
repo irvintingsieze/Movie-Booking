@@ -7,6 +7,7 @@ import MovieDetails from "../component/MovieDetails";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import OCBC_THEME_COLOR from "../utils/Constants";
+import ErrorDialog from "../component/ErrorDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -25,30 +26,33 @@ const useStyles = makeStyles({
 });
 
 const MovieSeating = () => {
+
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
+  const [openPopup, setOpenPopup] = useState(false);
   const [movieSeatings, setMovieSeatings] = useState([]);
   const [seatPricing, setPricing] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [movieDetails, setMovieDetails] = useState({});
+  const [movieTime, setMovieTime] = useState();
   const [clickedSeats, setClickedSeats] = useState(false);
   const [listOfSelectedSeats, setListOfSelectedSeats] = useState([]);
   const [price, setPrice] = useState(0.0);
   const [numNormal, setNumNormal] = useState(0);
   const [numVIP, setNumVIP] = useState(0);
   const [updateOccupied, setUpdateOccupied] = useState([]);
-
+  
   const fetchMovieSeatingData = async () => {
     try {
       const URL = BACKEND_URL + "/movie_seating/getSeats?id=" + id;
-      console.log(URL);
       const response = await axios.get(URL);
       if (response.data !== null) {
         const res = response.data;
         const movieSeatList = [];
         let data;
         setMovieDetails(res[0].movieSessions.movie);
+        setMovieTime(res[0].movieSessions.movie_timing.substring(0, 10));
         for (let i = 0; i < res.length; i++) {
           data = {
             id: res[i].movie_seating_id,
@@ -76,11 +80,14 @@ const MovieSeating = () => {
   }
 
   const bookSeatsHandler = async() =>{
-    updateOccupiedSeating();
-    history.push({
-      pathname: "/movie/transaction",
-      state: {price:price, movieSeatings:listOfSelectedSeats}
-    });
+    if (updateOccupied.length){
+      updateOccupiedSeating();
+      history.push({
+        pathname: "/movie/transaction",
+        state: {price:price, movieSeatings:listOfSelectedSeats}
+      });
+    }
+    setOpenPopup(!openPopup);
   }
 
   const fetchMovieSeatData = async () => {
@@ -134,17 +141,22 @@ const MovieSeating = () => {
       setPrice(price - seatPricing[movieSeatings[index].seatid - 1].price);
     }
   };
+
+  const handlePopup = () =>{
+    setOpenPopup(!openPopup);
+  }
   useEffect(() => {
     fetchMovieSeatingData();
     fetchMovieSeatData();
   }, []);
+
 
   if (!isLoading) return <LoadingScreen />;
 
   return (
     <div className="session_container">
       <div className="left_container_seating">
-        <MovieDetails movieDetails={movieDetails}/>
+        <MovieDetails movieDetails={movieDetails} movieTime={movieTime}/>
         <div class="rectangle">SCREEN</div>
         <div className="set_center">
           <div className="grid_seating">
@@ -172,7 +184,7 @@ const MovieSeating = () => {
                   return (
                     <div
                       className={
-                        seat.isSelected ? "circle_clicked" : "circle_vip"
+                        seat.isSelected ? "square_selected" : "square"
                       }
                       onClick={() => setClicked(index, seat.id)}
                     >
@@ -201,6 +213,7 @@ const MovieSeating = () => {
         >
           Book
         </Button>
+        <ErrorDialog isOpen = {openPopup} setOpen = {handlePopup}/>
       </div>
     </div>
   );

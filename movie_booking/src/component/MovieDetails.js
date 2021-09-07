@@ -10,6 +10,7 @@ const MovieDetails = (props) =>{
     <div>
       <h3>{props.movieDetails.name}</h3>
       <p>{props.movieDetails.duration}</p>
+      <p>{props.movieTime}</p>
     </div>
   </div>);
 }
