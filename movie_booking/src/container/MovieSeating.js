@@ -26,7 +26,6 @@ const useStyles = makeStyles({
 });
 
 const MovieSeating = () => {
-  
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
@@ -70,9 +69,11 @@ const MovieSeating = () => {
   };
 
   const updateOccupiedSeating = async () =>{
-    console.log(updateOccupied);
+    const user = localStorage.getItem("userid");
     try{
       await axios.patch(BACKEND_URL + "/movie_seating/occupy", { seatList: updateOccupied });
+      const res = await axios.post(BACKEND_URL + "/booking/newBooking/" + user, {seatList:updateOccupied});
+      console.log(res)
     }
     catch(exception){
       console.log(exception);

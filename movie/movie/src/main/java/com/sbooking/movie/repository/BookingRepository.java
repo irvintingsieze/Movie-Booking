@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking,Integer> {
-    @Query(value = "SELECT * FROM booking WHERE mv_seating_id = ?", nativeQuery = true)
+    @Query(value = "select * from booking where user_id = ?", nativeQuery = true)
     List<Booking> findAllByUsers(int userid);
 }

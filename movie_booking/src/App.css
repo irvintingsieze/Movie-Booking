@@ -196,3 +196,17 @@
 .logo:hover{
   cursor: pointer;
 }
+
+.row{
+  display: flex;
+  flex-direction: row;
+  color:#d42e12
+}
+
+.top_bar_button{
+  color:#d42e12;
+  
+  padding-right: 5%;
+  padding-left: 5%;
+  font-weight: bold;
+}

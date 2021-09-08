@@ -7,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import OCBC_THEME_COLOR from "../utils/Constants";
 import LoadingScreen from "../component/LoadingScreen";
 import ErrorDialog from "../component/ErrorDialog";
-import { useSelector } from "react-redux";
 
 const useStyles = makeStyles({
   submit: {

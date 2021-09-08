@@ -25,7 +25,7 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/booking")
+    @GetMapping("/booking/getUserBookings")
     public List<Booking> getBookingsByUser (@RequestParam String user_id){
         try{
             return bookingService.getBookingsByUser(Integer.parseInt(user_id));
