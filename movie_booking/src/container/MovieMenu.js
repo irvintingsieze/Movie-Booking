@@ -8,6 +8,7 @@ import LoadingScreen from "../component/LoadingScreen";
 const MovieMenu = () => {
   const [movieDataList, setMovieDataList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  console.log(localStorage.getItem("user"))
   const fetchMovieData = async () => {
     try {
       const URL = BACKEND_URL + "/movie/findAllMovies";

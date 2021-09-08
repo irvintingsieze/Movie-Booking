@@ -6,6 +6,7 @@ import com.sbooking.movie.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,5 +18,10 @@ public class UserController {
     @PostMapping("user")
     public Users createNewUser (@RequestBody NewUser newUser){
         return userService.createNewUser(newUser);
+    }
+
+    @PostMapping("user/login")
+    public Users getUser (@RequestParam String username, @RequestParam String password) {
+        return userService.getUser(username,password);
     }
 }

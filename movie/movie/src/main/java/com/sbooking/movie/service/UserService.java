@@ -16,5 +16,6 @@ public class UserService {
         return userRepository.save(newUser.getUser());
     }
 
+    public Users getUser (String username, String password) {return userRepository.login(username,password);}
 
 }

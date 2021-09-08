@@ -5,6 +5,7 @@ import TransactionLottie from "./../assets/transaction_animation.json";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import OCBC_THEME_COLOR from "../utils/Constants";
+import ErrorPage from "./ErrorPage";
 
  const useStyles = makeStyles({
   submit: {
@@ -53,6 +54,8 @@ const Transaction = () => {
         </Button>
       </center>
     );
+  }else{
+    return (<ErrorPage movieMenu = {movieMenu} styling={classes.submit}/>);
   }
 };
 

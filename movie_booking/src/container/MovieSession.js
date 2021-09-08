@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import OCBC_THEME_COLOR from "../utils/Constants";
 import LoadingScreen from "../component/LoadingScreen";
+import ErrorDialog from "../component/ErrorDialog";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles({
   submit: {
@@ -24,22 +26,30 @@ const MovieSession = () => {
   let { id } = useParams();
   const history = useHistory();
   const classes = useStyles();
+  const [openPopup, setOpenPopup] = useState(false);
   const [movieSessions, setMovieSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const isLoggedIn = localStorage.getItem("user");
   const BookingSessionHandler = (movie_session_id) => {
-    history.push({
-      pathname: "/movie/seating/" + movie_session_id,
-      state: { movie_session_id: movie_session_id },
-    });
+    if(!isLoggedIn){
+      handlePopup();
+    }else{
+      history.push({
+        pathname: "/movie/seating/" + movie_session_id,
+        state: { movie_session_id: movie_session_id },
+      });
+    }
+    
   };
+  const handlePopup = () =>{
+    setOpenPopup(!openPopup);
+  }
   const fetchMovieSessionData = async () => {
     try {
-      console.log("HELLO");
       const URL = BACKEND_URL + "/moviesession/movie/" + id;
       console.log(URL);
       const response = await axios.get(URL);
       if (response.data !== null) {
-        console.log(response.data);
         setMovieSessions(response.data);
         setIsLoading(true);
       }
@@ -78,6 +88,7 @@ const MovieSession = () => {
             </Button>
           ))}
       </center>
+      <ErrorDialog isOpen = {openPopup} setOpen = {handlePopup} content = "Please login to continue." />
     </div>
   );
 };

@@ -18,7 +18,7 @@ const ErrorDialog = (props)=>{
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            You have not selected any seats!
+            {props.content}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

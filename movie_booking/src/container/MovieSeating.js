@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Redirect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { BACKEND_URL } from "../utils/Constants";
 import axios from "axios";
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 });
 
 const MovieSeating = () => {
-
+  
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
@@ -150,7 +150,6 @@ const MovieSeating = () => {
     fetchMovieSeatData();
   }, []);
 
-
   if (!isLoading) return <LoadingScreen />;
 
   return (
@@ -213,7 +212,7 @@ const MovieSeating = () => {
         >
           Book
         </Button>
-        <ErrorDialog isOpen = {openPopup} setOpen = {handlePopup}/>
+        <ErrorDialog isOpen = {openPopup} setOpen = {handlePopup} content = "You have not selected any seats!"/>
       </div>
     </div>
   );
