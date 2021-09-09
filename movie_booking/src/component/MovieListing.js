@@ -12,8 +12,9 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 280,
-    margin: 70,
+    maxWidth: "18%",
+    marginTop: "2%",
+    marginLeft: "11%",
   },
   submit: {
     color: "white",
@@ -48,7 +49,7 @@ const MovieListing = (props) => {
           title="Contemplative Reptile"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="p">
+          <Typography gutterBottom variant="h6" component="p">
             {props.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">

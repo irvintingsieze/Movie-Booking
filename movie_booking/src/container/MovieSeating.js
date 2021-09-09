@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Redirect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { BACKEND_URL } from "../utils/Constants";
 import axios from "axios";
@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import OCBC_THEME_COLOR from "../utils/Constants";
 import ErrorDialog from "../component/ErrorDialog";
+import EmailDialog from "../component/EmailDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -30,6 +31,7 @@ const MovieSeating = () => {
   const history = useHistory();
   const { id } = useParams();
   const [openPopup, setOpenPopup] = useState(false);
+  const [isOpenEmailPopup, setIsOpenEmailPopup] = useState(false);
   const [movieSeatings, setMovieSeatings] = useState([]);
   const [seatPricing, setPricing] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,11 +71,8 @@ const MovieSeating = () => {
   };
 
   const updateOccupiedSeating = async () =>{
-    const user = localStorage.getItem("userid");
     try{
       await axios.patch(BACKEND_URL + "/movie_seating/occupy", { seatList: updateOccupied });
-      const res = await axios.post(BACKEND_URL + "/booking/newBooking/" + user, {seatList:updateOccupied});
-      console.log(res)
     }
     catch(exception){
       console.log(exception);
@@ -82,13 +81,10 @@ const MovieSeating = () => {
 
   const bookSeatsHandler = async() =>{
     if (updateOccupied.length){
-      updateOccupiedSeating();
-      history.push({
-        pathname: "/movie/transaction",
-        state: {price:price, movieSeatings:listOfSelectedSeats}
-      });
+      setIsOpenEmailPopup(!isOpenEmailPopup);
+    }else{
+      setOpenPopup(!openPopup);
     }
-    setOpenPopup(!openPopup);
   }
 
   const fetchMovieSeatData = async () => {
@@ -145,6 +141,9 @@ const MovieSeating = () => {
 
   const handlePopup = () =>{
     setOpenPopup(!openPopup);
+  }
+  const handleEmailPopup = ()=>{
+    setIsOpenEmailPopup(!isOpenEmailPopup);
   }
   useEffect(() => {
     fetchMovieSeatingData();
@@ -214,6 +213,9 @@ const MovieSeating = () => {
           Book
         </Button>
         <ErrorDialog isOpen = {openPopup} setOpen = {handlePopup} content = "You have not selected any seats!"/>
+        <EmailDialog isOpen= {isOpenEmailPopup} setOpen = {handleEmailPopup} numNormal = {numNormal} numVIP={numVIP} price={price} listOfSelectedSeats= {listOfSelectedSeats}
+          updateOccupiedSeating = {updateOccupiedSeating} movieName={movieDetails.name} movieTime ={movieTime}
+        />
       </div>
     </div>
   );
