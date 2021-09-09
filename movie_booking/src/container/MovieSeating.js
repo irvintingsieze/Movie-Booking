@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { BACKEND_URL } from "../utils/Constants";
 import axios from "axios";
 import LoadingScreen from "../component/LoadingScreen";
@@ -28,7 +28,6 @@ const useStyles = makeStyles({
 
 const MovieSeating = () => {
   const classes = useStyles();
-  const history = useHistory();
   const { id } = useParams();
   const [openPopup, setOpenPopup] = useState(false);
   const [isOpenEmailPopup, setIsOpenEmailPopup] = useState(false);
@@ -187,7 +186,7 @@ const MovieSeating = () => {
                       }
                       onClick={() => setClicked(index, seat.id)}
                     >
-                      VIP
+                      {index+1}
                     </div>
                   );
                 }

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.AddressException;
@@ -20,17 +21,30 @@ import javax.mail.internet.InternetAddress;
 
 @Service
 public class EmailService  {
+
+    @Value("${apikey}")
+    private String apiKey;
+
+    @Value("${apisecret}")
+    private String apiSecret;
+
+    @Value("${name}")
+    private String name;
+
+    @Value("${email}")
+    private String email;
+
     public String sendMail (EmailMessage emailMessageDetails) throws MailjetException, MailjetSocketTimeoutException {
         MailjetClient client;
         MailjetRequest request;
         MailjetResponse response;
-        client = new MailjetClient("078d5057f11c29a82048d27f18b0feef","8b4ba303d300be508aeea1c17d8384fb", new ClientOptions("v3.1"));
+        client = new MailjetClient(apiKey,apiSecret, new ClientOptions("v3.1"));
         request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                         .put(new JSONObject()
                                 .put(Emailv31.Message.FROM, new JSONObject()
-                                        .put("Email", "moviemngmnt@gmail.com")
-                                        .put("Name", "Movie"))
+                                        .put("Email", email)
+                                        .put("Name", name))
                                 .put(Emailv31.Message.TO, new JSONArray()
                                         .put(new JSONObject()
                                                 .put("Email", emailMessageDetails.getEmail())

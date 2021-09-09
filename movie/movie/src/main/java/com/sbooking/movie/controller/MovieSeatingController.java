@@ -57,4 +57,13 @@ public class MovieSeatingController {
     public List<Seats> getAllSeats (){
         return movieSeatingService.getAllSeats();
     }
+
+    @PatchMapping("movie_seating/{id}")
+    public MovieSeating setSeatsSelected(@PathVariable String id){
+        try{
+            return movieSeatingService.setOccupied(Integer.parseInt(id));
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

@@ -32,6 +32,7 @@ public class MovieSeatingService {
         for (int index = 0; index<MOVIE_SEATS_TOTAL; index ++){
             MovieSeating movieSeating = new MovieSeating();
             movieSeating.setOccupied(false);
+            movieSeating.setSelected(false);
             movieSeating.setMovieSessions(movieSession);
             if (index>=30 || index < 20)
                 movieSeating.setSeats(normalSeats);
@@ -60,13 +61,24 @@ public class MovieSeatingService {
     }
 
     public void setMultipleOccupied (int[] seatIdList){
+        List<MovieSeating> movieSeatingList = new ArrayList<>();
         for (int i=0; i<seatIdList.length; i++){
             MovieSeating movieSeating = movieSeatingRepository.findById(seatIdList[i]).orElse(null);
             if (movieSeating!=null){
                 movieSeating.setOccupied(true);
-                movieSeatingRepository.save(movieSeating);
+                movieSeatingList.add(movieSeating);
             }
         }
+        movieSeatingRepository.saveAll(movieSeatingList);
+    }
+
+    public MovieSeating setSelected (int movieSeatingId){
+        MovieSeating movieSeating = movieSeatingRepository.findById(movieSeatingId).orElse(null);
+        if (movieSeating!=null){
+            movieSeating.setSelected(true);
+            return movieSeatingRepository.save(movieSeating);
+        }
+        return null;
     }
 
 }

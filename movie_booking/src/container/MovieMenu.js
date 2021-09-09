@@ -28,8 +28,8 @@ const MovieMenu = () => {
 
   if (!isLoading) return <LoadingScreen />;
   return (
-    <center>
-      <Grid container item xs={20} spacing={20}>
+    <center style={{marginTop:"3%"}}>
+      <Grid container item xs={10} spacing={2} >
         {movieDataList &&
           movieDataList.map((movieItem, index) => (
             <MovieListing
