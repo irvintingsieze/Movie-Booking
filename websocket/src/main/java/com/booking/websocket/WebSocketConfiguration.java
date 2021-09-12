@@ -13,10 +13,8 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
-
     }
 
     @Override
@@ -24,9 +22,8 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
         // Registers the endpoint where the connection will take place
         registry.addEndpoint("/stomp")
-                .setAllowedOrigins("http://localhost:3000")
+                .setAllowedOrigins("http://139.59.240.162:8082")
                 .withSockJS();
-
     }
 
 }

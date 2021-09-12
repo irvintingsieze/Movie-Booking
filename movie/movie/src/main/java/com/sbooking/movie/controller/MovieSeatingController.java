@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "http://139.59.240.162:8082", maxAge = 3600)
 @RestController
 public class MovieSeatingController {
 
@@ -52,5 +52,10 @@ public class MovieSeatingController {
             return null;
         }
     };
+
+    @GetMapping("movie_seating/getAllSeats")
+    public List<Seats> getAllSeats (){
+        return movieSeatingService.getAllSeats();
+    }
 
 }

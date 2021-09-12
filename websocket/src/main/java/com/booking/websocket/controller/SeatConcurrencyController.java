@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Controller
 public class SeatConcurrencyController {
 
@@ -15,7 +14,7 @@ public class SeatConcurrencyController {
 
     @MessageMapping("seat_booking")
     @SendTo("/topic/seatid")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://139.59.240.162:8082")
     public String getMessages(String seatid){
         int seat = Integer.parseInt(seatid);
         if (seat>=0){
@@ -32,7 +31,7 @@ public class SeatConcurrencyController {
 
     @MessageMapping("disconnect")
     @SendTo("/topic/seatid")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://139.59.240.162:8082")
     public String removeSeats(String seatid){
         String[] s = seatid.split(",");
         for (int i=0;i <s.length;i++){

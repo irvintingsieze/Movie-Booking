@@ -32,7 +32,6 @@ public class MovieSeatingService {
         for (int index = 0; index<MOVIE_SEATS_TOTAL; index ++){
             MovieSeating movieSeating = new MovieSeating();
             movieSeating.setOccupied(false);
-            movieSeating.setSelected(false);
             movieSeating.setMovieSessions(movieSession);
             if (index>=30 || index < 20)
                 movieSeating.setSeats(normalSeats);
@@ -66,6 +65,10 @@ public class MovieSeatingService {
             }
         }
         movieSeatingRepository.saveAll(movieSeatingList);
+    }
+
+    public List <Seats> getAllSeats () {
+        return seatsRepository.findAll();
     }
 
 }

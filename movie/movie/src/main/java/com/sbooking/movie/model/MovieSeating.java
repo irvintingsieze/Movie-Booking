@@ -17,8 +17,6 @@ public class MovieSeating {
     @Id
     private int movie_seating_id;
     private boolean isOccupied;
-    @Column(columnDefinition = "boolean default false")
-    private boolean isSelected;
     @ManyToOne(targetEntity = MovieSession.class,cascade = CascadeType.ALL)
     @JoinColumn(name="mv_session_id",referencedColumnName = "movie_session_id")
     private MovieSession movieSessions;

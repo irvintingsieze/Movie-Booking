@@ -18,10 +18,8 @@ public class MovieApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**");
+				registry.addMapping("/**").allowedOrigins("http://139.59.240.162:8082");
 			}
 		};
 	}
-
-
 }
