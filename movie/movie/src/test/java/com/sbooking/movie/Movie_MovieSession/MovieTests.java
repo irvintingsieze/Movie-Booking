@@ -1,13 +1,11 @@
-package com.sbooking.movie.Movie;
+package com.sbooking.movie.Movie_MovieSession;
 
-import com.sbooking.movie.controller.MovieController;
 import com.sbooking.movie.model.Movie;
 import com.sbooking.movie.repository.MovieRepository;
 import com.sbooking.movie.service.MovieService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;

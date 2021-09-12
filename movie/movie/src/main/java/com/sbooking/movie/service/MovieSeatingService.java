@@ -42,15 +42,6 @@ public class MovieSeatingService {
         return movieSeatings;
     }
 
-    public MovieSeating setOccupied (int movieSeatingId){
-        MovieSeating movieSeating = movieSeatingRepository.findById(movieSeatingId).orElse(null);
-        if (movieSeating!=null){
-            movieSeating.setOccupied(true);
-            return movieSeatingRepository.save(movieSeating);
-        }
-        return null;
-    }
-
     public List<MovieSeating> getSeatsBySession (int sessionId){
         return movieSeatingRepository.findAllByMovieSession(sessionId);
     }

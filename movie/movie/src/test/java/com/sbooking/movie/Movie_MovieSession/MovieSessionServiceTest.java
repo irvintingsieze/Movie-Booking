@@ -1,4 +1,4 @@
-package com.sbooking.movie.MovieSession;
+package com.sbooking.movie.Movie_MovieSession;
 
 
 import com.sbooking.movie.model.Movie;

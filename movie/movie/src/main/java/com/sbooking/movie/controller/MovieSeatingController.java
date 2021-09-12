@@ -26,15 +26,6 @@ public class MovieSeatingController {
         }
     }
 
-    @PatchMapping("movie_seating/{id}")
-    public MovieSeating setOccupied(@PathVariable String id){
-        try{
-            return movieSeatingService.setOccupied(Integer.parseInt(id));
-        }catch (Exception e){
-            return null;
-        }
-    }
-
     @PatchMapping("movie_seating/occupy")
     public void setMultipleOccupied(@RequestBody MovieSeatUpdate listSeatId){
         try{
