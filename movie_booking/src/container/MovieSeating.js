@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { BACKEND_URL } from "../utils/Constants";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, Prompt } from "react-router-dom";
+import SockJsClient from "react-stomp";
+import { BACKEND_CONCURRENCY_URL, BACKEND_URL } from "../utils/Constants";
 import axios from "axios";
 import LoadingScreen from "../component/LoadingScreen";
 import MovieDetails from "../component/MovieDetails";
@@ -9,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import OCBC_THEME_COLOR from "../utils/Constants";
 import ErrorDialog from "../component/ErrorDialog";
 import EmailDialog from "../component/EmailDialog";
+import { Beforeunload } from "react-beforeunload";
 
 const useStyles = makeStyles({
   root: {
@@ -29,6 +31,8 @@ const useStyles = makeStyles({
 const MovieSeating = () => {
   const classes = useStyles();
   const { id } = useParams();
+  let clientRef = useRef(null);
+  const [allSelectedSeats, setAllSelectedSeats] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
   const [isOpenEmailPopup, setIsOpenEmailPopup] = useState(false);
   const [movieSeatings, setMovieSeatings] = useState([]);
@@ -42,7 +46,22 @@ const MovieSeating = () => {
   const [numNormal, setNumNormal] = useState(0);
   const [numVIP, setNumVIP] = useState(0);
   const [updateOccupied, setUpdateOccupied] = useState([]);
-  
+
+  const onSeatIdReceived = (seatList) => {
+    setAllSelectedSeats(seatList);
+    console.log(seatList);
+  };
+
+  const sendSeatSelection = async (newSelection) => {
+    try {
+      await clientRef.sendMessage("/app/seat_booking", newSelection);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   const fetchMovieSeatingData = async () => {
     try {
       const URL = BACKEND_URL + "/movie_seating/getSeats?id=" + id;
@@ -69,22 +88,23 @@ const MovieSeating = () => {
     }
   };
 
-  const updateOccupiedSeating = async () =>{
-    try{
-      await axios.patch(BACKEND_URL + "/movie_seating/occupy", { seatList: updateOccupied });
-    }
-    catch(exception){
+  const updateOccupiedSeating = async () => {
+    try {
+      await axios.patch(BACKEND_URL + "/movie_seating/occupy", {
+        seatList: updateOccupied,
+      });
+    } catch (exception) {
       console.log(exception);
     }
-  }
+  };
 
-  const bookSeatsHandler = async() =>{
-    if (updateOccupied.length){
+  const bookSeatsHandler = async () => {
+    if (updateOccupied.length) {
       setIsOpenEmailPopup(!isOpenEmailPopup);
-    }else{
+    } else {
       setOpenPopup(!openPopup);
     }
-  }
+  };
 
   const fetchMovieSeatData = async () => {
     try {
@@ -109,41 +129,38 @@ const MovieSeating = () => {
     movieSeatings[index].isSelected = !movieSeatings[index].isSelected;
     setMovieSeatings(movieSeatings);
     setClickedSeats(!clickedSeats);
+    sendSeatSelection(id);
     if (listOfSelectedSeats.includes(index + 1)) {
       const i = listOfSelectedSeats.indexOf(index + 1);
       const j = updateOccupied.indexOf(id);
       if (i > -1) {
         listOfSelectedSeats.splice(i, 1);
         setListOfSelectedSeats(listOfSelectedSeats);
-        updateOccupied.splice(j,1);
+        updateOccupied.splice(j, 1);
         setUpdateOccupied(updateOccupied);
       }
     } else {
       setListOfSelectedSeats([...listOfSelectedSeats, index + 1]);
       setUpdateOccupied([...updateOccupied, id]);
     }
-    if (movieSeatings[index].isSelected){
+    if (movieSeatings[index].isSelected) {
       setPrice(price + seatPricing[movieSeatings[index].seatid - 1].price);
-      if (index>20 && index<31)
-        setNumVIP(numVIP+1);
-      else
-        setNumNormal(numNormal+1)
-    }
-    else {
-      if (index>20 && index<31)
-        setNumVIP(numVIP-1);
-      else
-        setNumNormal(numNormal-1)
+      if (index > 20 && index < 31) setNumVIP(numVIP + 1);
+      else setNumNormal(numNormal + 1);
+    } else {
+      if (index > 20 && index < 31) setNumVIP(numVIP - 1);
+      else setNumNormal(numNormal - 1);
       setPrice(price - seatPricing[movieSeatings[index].seatid - 1].price);
     }
   };
 
-  const handlePopup = () =>{
+  const handlePopup = () => {
     setOpenPopup(!openPopup);
-  }
-  const handleEmailPopup = ()=>{
+  };
+  const handleEmailPopup = () => {
     setIsOpenEmailPopup(!isOpenEmailPopup);
-  }
+  };
+
   useEffect(() => {
     fetchMovieSeatingData();
     fetchMovieSeatData();
@@ -154,39 +171,51 @@ const MovieSeating = () => {
   return (
     <div className="session_container">
       <div className="left_container_seating">
-        <MovieDetails movieDetails={movieDetails} movieTime={movieTime}/>
-        <div class="rectangle">SCREEN</div>
+        <MovieDetails movieDetails={movieDetails} movieTime={movieTime} />
+        <div className="rectangle">SCREEN</div>
         <div className="set_center">
           <div className="grid_seating">
             {movieSeatings &&
               movieSeatings.map((seat, index) => {
-                if (seat.isOccupied){
+                if (seat.isOccupied) {
                   return (
-                      <div className="circle_unavail">
-                        {index + 1}
-                      </div>
-                    );
+                    <div key={index} className="circle_unavail">
+                      {index + 1}
+                    </div>
+                  );
+                }
+                if (allSelectedSeats.includes(seat.id) && !seat.isSelected) {
+                  return (
+                    <div
+                      key={index}
+                      className={
+                        seat.seatid === 2
+                          ? "circle_clicked_by_others"
+                          : "square_selected_by_others"
+                      }
+                    >
+                      {index + 1}
+                    </div>
+                  );
                 }
                 if (seat.seatid === 2) {
-                    return (
-                      <div
-                        className={
-                          seat.isSelected ? "circle_clicked" : "circle"
-                        }
-                        onClick={() => setClicked(index, seat.id)}
-                      >
-                        {index + 1}
-                      </div>
-                    );
+                  return (
+                    <div
+                      key={index}
+                      className={seat.isSelected ? "circle_clicked" : "circle"}
+                      onClick={() => setClicked(index, seat.id)}
+                    >
+                      {index + 1}
+                    </div>
+                  );
                 } else {
                   return (
                     <div
-                      className={
-                        seat.isSelected ? "square_selected" : "square"
-                      }
+                      key={index}
+                      className={seat.isSelected ? "square_selected" : "square"}
                       onClick={() => setClicked(index, seat.id)}
                     >
-                      {index+1}
+                      {index + 1}
                     </div>
                   );
                 }
@@ -194,14 +223,24 @@ const MovieSeating = () => {
           </div>
         </div>
       </div>
-      <hr/>
+      <hr />
       <div className="right_container_seating">
         <h3 className="text">Seating Selection</h3>
         <h4>Seat Selected: </h4>
-        <p>{listOfSelectedSeats.length? listOfSelectedSeats.join(", "):"None"}</p>
-        <h4>Total normal seats selected: <span className="text_span">{numNormal}</span></h4>
-        <h4>Total VIP seats selected: <span className="text_span">{numVIP}</span></h4>
-        <h4>Total Price: <span className="text_span">${Math.abs(price).toFixed(2)}</span></h4>
+        <p>
+          {listOfSelectedSeats.length ? listOfSelectedSeats.join(", ") : "None"}
+        </p>
+        <h4>
+          Total normal seats selected:{" "}
+          <span className="text_span">{numNormal}</span>
+        </h4>
+        <h4>
+          Total VIP seats selected: <span className="text_span">{numVIP}</span>
+        </h4>
+        <h4>
+          Total Price:{" "}
+          <span className="text_span">${Math.abs(price).toFixed(2)}</span>
+        </h4>
         <Button
           type="submit"
           fullWidth
@@ -211,11 +250,55 @@ const MovieSeating = () => {
         >
           Book
         </Button>
-        <ErrorDialog isOpen = {openPopup} setOpen = {handlePopup} content = "You have not selected any seats!"/>
-        <EmailDialog isOpen= {isOpenEmailPopup} setOpen = {handleEmailPopup} numNormal = {numNormal} numVIP={numVIP} price={price} listOfSelectedSeats= {listOfSelectedSeats}
-          updateOccupiedSeating = {updateOccupiedSeating} movieName={movieDetails.name} movieTime ={movieTime}
+        <ErrorDialog
+          isOpen={openPopup}
+          setOpen={handlePopup}
+          content="You have not selected any seats!"
+        />
+        <EmailDialog
+          isOpen={isOpenEmailPopup}
+          setOpen={handleEmailPopup}
+          numNormal={numNormal}
+          numVIP={numVIP}
+          price={price}
+          listOfSelectedSeats={listOfSelectedSeats}
+          updateOccupiedSeating={updateOccupiedSeating}
+          movieName={movieDetails.name}
+          movieTime={movieTime}
+        />
+        <SockJsClient
+          url={BACKEND_CONCURRENCY_URL + "/stomp"}
+          topics={["/topic/seatid", "seat_booking", "disconnect"]}
+          onConnect={() => {
+            clientRef.sendMessage("/app/seat_booking", -1);
+            console.log("Connected to websocket");
+          }}
+          onDisconnect={() => {
+            console.log("Disconnected from websocket");
+          }}
+          onMessage={onSeatIdReceived}
+          ref={(client) => {
+            clientRef = client;
+          }}
         />
       </div>
+      <Prompt
+        message={() => {
+          clientRef &&
+            clientRef.sendMessage("/app/disconnect", listOfSelectedSeats);
+        }}
+      />
+      {listOfSelectedSeats.length && (
+        <Beforeunload
+          onBeforeunload={(event) => {
+            event.preventDefault();
+            clientRef &&
+              clientRef.sendMessage("/app/disconnect", listOfSelectedSeats);
+            clientRef.onDisconnect();
+            return false;
+          }}
+        />
+      )}
     </div>
   );
 };

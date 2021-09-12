@@ -56,10 +56,6 @@ public class MovieSeatingService {
         return movieSeatingRepository.findAllByMovieSession(sessionId);
     }
 
-    public List <Seats> getAllSeats () {
-        return seatsRepository.findAll();
-    }
-
     public void setMultipleOccupied (int[] seatIdList){
         List<MovieSeating> movieSeatingList = new ArrayList<>();
         for (int i=0; i<seatIdList.length; i++){
@@ -70,15 +66,6 @@ public class MovieSeatingService {
             }
         }
         movieSeatingRepository.saveAll(movieSeatingList);
-    }
-
-    public MovieSeating setSelected (int movieSeatingId){
-        MovieSeating movieSeating = movieSeatingRepository.findById(movieSeatingId).orElse(null);
-        if (movieSeating!=null){
-            movieSeating.setSelected(true);
-            return movieSeatingRepository.save(movieSeating);
-        }
-        return null;
     }
 
 }
