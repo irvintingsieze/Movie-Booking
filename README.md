@@ -32,7 +32,4 @@ Check out the video [demo](https://youtu.be/PE0p4fh7Wfw)!
 1. mvn clean install
 2. ./mvnw spring-boot:run
 
-For unit and integration test:
-1. mvn test
-
 Contact me for db credentials. Live hosting website URL in documentation google drive submission
