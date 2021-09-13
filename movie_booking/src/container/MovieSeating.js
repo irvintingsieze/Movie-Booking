@@ -285,15 +285,15 @@ const MovieSeating = () => {
       <Prompt
         message={() => {
           clientRef && listOfSelectedSeats.length &&
-            clientRef.sendMessage("/app/disconnect", listOfSelectedSeats);
+            clientRef.sendMessage("/app/disconnect", updateOccupied);
         }}
       />
       {listOfSelectedSeats.length && (
         <Beforeunload
           onBeforeunload={(event) => {
             event.preventDefault();
-            clientRef &&
-              clientRef.sendMessage("/app/disconnect", listOfSelectedSeats);
+            
+              clientRef.sendMessage("/app/disconnect", updateOccupied);
             clientRef.onDisconnect();
             return false;
           }}
