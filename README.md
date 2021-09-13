@@ -16,8 +16,23 @@ This Movie booking application allows:
 ## Technology Stack
 Frontend: React
 
-Backend: Spring Boot, STOMP protocol
+Backend: Spring Boot REST APIs, STOMP protocol
 
 Database: PostgreSQL
 
 Check out the video [demo](https://youtu.be/PE0p4fh7Wfw)!
+
+## Running the application
+
+### Frontend:
+1. npm i
+2. npm start
+
+### Backend:
+1. mvn clean install
+2. ./mvnw spring-boot:run
+
+For unit and integration test:
+1. mvn test
+
+Contact me for db credentials. Live hosting website URL in documentation google drive submission
