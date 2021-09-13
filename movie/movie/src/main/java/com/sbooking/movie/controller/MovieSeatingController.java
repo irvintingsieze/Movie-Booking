@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "http://139.59.240.162:8082", maxAge = 3600)
 @RestController
 public class MovieSeatingController {
 
@@ -22,15 +22,6 @@ public class MovieSeatingController {
             return movieSeatingService.addNewSession(Integer.parseInt(id));
         }catch (Exception e){
 
-            return null;
-        }
-    }
-
-    @PatchMapping("movie_seating/{id}")
-    public MovieSeating setOccupied(@PathVariable String id){
-        try{
-            return movieSeatingService.setOccupied(Integer.parseInt(id));
-        }catch (Exception e){
             return null;
         }
     }
@@ -57,4 +48,5 @@ public class MovieSeatingController {
     public List<Seats> getAllSeats (){
         return movieSeatingService.getAllSeats();
     }
+
 }

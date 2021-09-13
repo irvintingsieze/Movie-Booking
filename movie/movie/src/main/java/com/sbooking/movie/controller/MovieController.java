@@ -23,11 +23,7 @@ public class MovieController {
 
     @GetMapping("/movie/{id}")
     public Movie findMovieById(@PathVariable String id){
-        try{
             return movieService.getMovieById(Integer.parseInt(id));
-        }catch (Exception e){
-            return null;
-        }
     }
 
     @GetMapping("moviesession/{id}")

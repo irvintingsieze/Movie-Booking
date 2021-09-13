@@ -28,16 +28,13 @@ const MovieSession = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [movieSessions, setMovieSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const isLoggedIn = localStorage.getItem("user");
   const BookingSessionHandler = (movie_session_id) => {
-    if(!isLoggedIn){
-      handlePopup();
-    }else{
+    
       history.push({
         pathname: "/movie/seating/" + movie_session_id,
         state: { movie_session_id: movie_session_id },
       });
-    }
+    
     
   };
   const handlePopup = () =>{

@@ -8,12 +8,18 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import OCBC_THEME_COLOR from "../utils/Constants";
+import { useMediaQuery } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 280,
-    margin: 70,
+    maxWidth: "20%",
+    marginLeft: "9%",
+  },
+  root_none:{
+    maxWidth:"60%",
+    marginLeft:"20%",
+    marginTop:"5%"
   },
   submit: {
     color: "white",
@@ -24,6 +30,7 @@ const useStyles = makeStyles({
       background: OCBC_THEME_COLOR,
     },
   },
+  
 });
 
 const MovieListing = (props) => {
@@ -38,7 +45,7 @@ const MovieListing = (props) => {
   };
 
   return (
-    <Card className={classes.root}>
+    <Card className={useMediaQuery('(min-width:880px)')?classes.root:classes.root_none}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -48,7 +55,7 @@ const MovieListing = (props) => {
           title="Contemplative Reptile"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="p">
+          <Typography gutterBottom variant="h6" component="p">
             {props.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">

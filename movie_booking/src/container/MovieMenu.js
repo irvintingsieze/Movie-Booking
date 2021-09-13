@@ -8,7 +8,6 @@ import LoadingScreen from "../component/LoadingScreen";
 const MovieMenu = () => {
   const [movieDataList, setMovieDataList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(localStorage.getItem("user"))
   const fetchMovieData = async () => {
     try {
       const URL = BACKEND_URL + "/movie/findAllMovies";
@@ -29,8 +28,8 @@ const MovieMenu = () => {
 
   if (!isLoading) return <LoadingScreen />;
   return (
-    <center>
-      <Grid container item xs={50} spacing={20}>
+    <center style={{marginTop:"3%"}}>
+      <Grid container item xs={10} spacing={2} >
         {movieDataList &&
           movieDataList.map((movieItem, index) => (
             <MovieListing

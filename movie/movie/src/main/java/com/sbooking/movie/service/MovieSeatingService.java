@@ -42,31 +42,24 @@ public class MovieSeatingService {
         return movieSeatings;
     }
 
-    public MovieSeating setOccupied (int movieSeatingId){
-        MovieSeating movieSeating = movieSeatingRepository.findById(movieSeatingId).orElse(null);
-        if (movieSeating!=null){
-            movieSeating.setOccupied(true);
-            return movieSeatingRepository.save(movieSeating);
-        }
-        return null;
-    }
-
     public List<MovieSeating> getSeatsBySession (int sessionId){
         return movieSeatingRepository.findAllByMovieSession(sessionId);
     }
 
-    public List <Seats> getAllSeats () {
-        return seatsRepository.findAll();
-    }
-
     public void setMultipleOccupied (int[] seatIdList){
+        List<MovieSeating> movieSeatingList = new ArrayList<>();
         for (int i=0; i<seatIdList.length; i++){
             MovieSeating movieSeating = movieSeatingRepository.findById(seatIdList[i]).orElse(null);
             if (movieSeating!=null){
                 movieSeating.setOccupied(true);
-                movieSeatingRepository.save(movieSeating);
+                movieSeatingList.add(movieSeating);
             }
         }
+        movieSeatingRepository.saveAll(movieSeatingList);
+    }
+
+    public List <Seats> getAllSeats () {
+        return seatsRepository.findAll();
     }
 
 }
