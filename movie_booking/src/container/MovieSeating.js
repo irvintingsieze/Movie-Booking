@@ -284,7 +284,7 @@ const MovieSeating = () => {
       </div>
       <Prompt
         message={() => {
-          clientRef &&
+          clientRef && listOfSelectedSeats.length &&
             clientRef.sendMessage("/app/disconnect", listOfSelectedSeats);
         }}
       />
